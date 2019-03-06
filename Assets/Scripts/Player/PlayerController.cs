@@ -18,6 +18,8 @@ namespace RSM
             /// </summary>
             public static PlayerController Instance { get; private set; }
 
+            public PlayerMovement Movement { get; private set; }
+
             /// <summary>
             /// Used to access the player's current score. Cannot be changed directly.
             /// </summary>
@@ -33,6 +35,8 @@ namespace RSM
 
             // Whether or not we currently have the powerup.
             public bool poweredUp = false;
+
+            public float minY = -15;
 
             /// <summary>
             /// Set up a basic Player Controller with the default settings.
@@ -58,6 +62,9 @@ namespace RSM
                 {
                     Instance = this;
                 }
+
+                // Get movement component.
+                Movement = GetComponent<PlayerMovement>();
             }
 
             /// <summary>
@@ -66,9 +73,8 @@ namespace RSM
             /// </summary>
             public void CheckpointReched(Checkpoint reached)
             {
-                // Update current checkpoint, and get the checkpoint to read the world status.
+                // Update current checkpoint.
                 currentCheckpoint = reached;
-                currentCheckpoint.Activate();
             }
 
             /// <summary>
@@ -88,12 +94,39 @@ namespace RSM
             /// </summary>
             public void LoseLife()
             {
-                Lives -= 1;
+                // Lose a life, and check that we still have any after this.
+                --Lives;
 
                 if (Lives < 0)
                 {
+                    RSM.Levels.LevelController.Instance.StartCoroutine("FadeOutOnly");
                     GameOver();
                 }
+                else
+                {            
+                    RSM.Levels.LevelController.Instance.StartCoroutine("FadeOut");
+                    Invoke("ResetLocation", RSM.Levels.LevelController.Instance.timeToFade);
+                }
+            }
+
+            private void ResetLocation()
+            {                
+                try
+                {
+                    // If we still have lives, return to the location of the checkpoint.
+                    transform.position = currentCheckpoint.Location();
+                    RSM.Levels.LevelController.Instance.ReloadLevel();
+                }
+                catch (System.NullReferenceException)
+                {
+                    throw new System.NullReferenceException("No current checkpoint found, make sure a checkpoint is assigned at the start of the level for the player to obtain.");
+                }
+            }
+
+            public void LevelLoaded(Vector2 location)
+            {
+                transform.position = location;
+                minY = location.y - 15f;
             }
 
             /// <summary>
@@ -101,7 +134,6 @@ namespace RSM
             /// </summary>
             private void GameOver()
             {
-                // Disable player movement.
                 // Display game over info.
                 // Display high scores.
                 // Save high scores.
