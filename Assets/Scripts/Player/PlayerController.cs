@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RSM.WorldEntity;
 
 namespace RSM
 {
@@ -9,25 +10,13 @@ namespace RSM
         /// <summary>
         /// Player controller keeps track of general player information such as score, lives, etc.
         /// </summary>
-        public class PlayerController
+        public class PlayerController : MonoBehaviour
         {
-            
+
             /// <summary>
             /// Used to get access to the player controller singleton.
             /// </summary>
-            public static PlayerController Instance
-            {
-                get
-                {
-                    if (Instance == null)
-                    {
-                        Instance = new PlayerController();
-                    }
-
-                    return Instance;
-                }
-                private set;
-            }
+            public static PlayerController Instance { get; private set; }
 
             /// <summary>
             /// Used to access the player's current score. Cannot be changed directly.
@@ -54,6 +43,21 @@ namespace RSM
                 Lives = 2;
                 currentCheckpoint = null;
                 poweredUp = false;
+            }
+
+            /// <summary>
+            /// Set up player controller singleton.
+            /// </summary>
+            private void Awake()
+            {
+                if (Instance != null)
+                {
+                    DestroyImmediate(gameObject);
+                }
+                else
+                {
+                    Instance = this;
+                }
             }
 
             /// <summary>
