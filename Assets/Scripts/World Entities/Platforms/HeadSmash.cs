@@ -6,7 +6,7 @@ namespace RSM
 {
     namespace WorldEntity
     {
-        public class HeadSmash : MonoBehaviour
+        public class HeadSmash : Platform
         {
 
             [SerializeField]
@@ -34,7 +34,7 @@ namespace RSM
                     if (Mathf.Abs(offset.x) < Mathf.Abs(offset.y))
                     {
                         RSM.Player.PlayerController.Instance.AddScore(scoreOnDestroy);
-                        Destroy(gameObject);
+                        Disable();
                     }
                 }
             }

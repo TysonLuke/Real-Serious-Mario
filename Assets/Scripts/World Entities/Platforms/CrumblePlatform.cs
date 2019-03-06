@@ -6,7 +6,7 @@ namespace RSM
 {
     namespace WorldEntity
     {
-        public class CrumblePlatform : MonoBehaviour
+        public class CrumblePlatform : Platform
         {
             [SerializeField]
             [Tooltip("The time taken before this platform is destroyed.")]
@@ -19,19 +19,22 @@ namespace RSM
             // Whether or not we're currently falling.
             private bool falling = false;
 
-            // Where we started from.
-            private Vector3 origin;
-
-            private void Awake()
-            {
-                origin = transform.position;
-            }
-
             private void OnCollisionEnter2D(Collision2D col)
             {
                 // If the player collides with this object, destroy it after the timer ends.
                 if (col.gameObject.tag == "Player")
                 {
+                    // Get the direction between the player and the box.
+                    Vector2 offset = transform.position - col.transform.position;
+
+                    // Check whether we hit it from the top or not.
+                    if (offset.y > 0)
+                    {
+                        // If we hit the bottom, we have no need to do this.
+                        return;
+                    }
+
+                    // If we landed on top if it, fall after a delay.
                     Invoke("BeginFalling", timeToFall);
                 }
             }
@@ -39,9 +42,9 @@ namespace RSM
             /// <summary>
             /// Called after hitting a checkpoint. Restores to original location and stops falling.
             /// </summary>
-            private void Restore()
+            public override void Enable()
             {
-                transform.position = origin;
+                base.Enable();
                 falling = false;
             }
 
@@ -50,7 +53,7 @@ namespace RSM
                 falling = true;
 
                 // Stop falling once it's definitely off the screen to save a bit of performance.
-                Invoke("StopFalling", 10);
+                Invoke("StopFalling", 1);
             }
 
             private void Update()
@@ -64,6 +67,7 @@ namespace RSM
 
             private void StopFalling()
             {
+                Disable();
                 falling = false;
             }
         }
