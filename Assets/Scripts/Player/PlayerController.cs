@@ -127,6 +127,8 @@ namespace RSM
             {
                 transform.position = location;
                 minY = location.y - 15f;
+                Camera.main.GetComponent<CameraFollow>().Start();
+                GameObject.Find("Background").GetComponent<CameraFollow>().Start();
             }
 
             /// <summary>

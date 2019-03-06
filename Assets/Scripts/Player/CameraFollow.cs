@@ -18,7 +18,7 @@ namespace RSM
             // Allows us to move the background, as well as the camera with the one script.
             public float zPos = -10;
 
-            private void Start()
+            public void Start()
             {
                 // Find the position of the player when we start the level.
                 yPos = PlayerController.Instance.transform.position.y;

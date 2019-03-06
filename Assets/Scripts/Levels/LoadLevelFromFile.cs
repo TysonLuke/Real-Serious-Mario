@@ -32,6 +32,11 @@ namespace RSM
                     levels.Add(current.Cell(0, 1), current);
                 }
 
+                if (PlayerPrefs.HasKey("LevelToLoad"))
+                {
+                    nextLevel = PlayerPrefs.GetString("LevelToLoad");
+                }
+
                 LoadLevel();
             }
 
