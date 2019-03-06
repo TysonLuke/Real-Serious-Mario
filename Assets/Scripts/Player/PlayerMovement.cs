@@ -40,6 +40,8 @@ namespace RSM
 
             private bool grounded = false;
 
+            private bool movementEnabled = true;
+
             private void Awake()
             {
                 boxCollider = GetComponent<BoxCollider2D>();
@@ -48,9 +50,15 @@ namespace RSM
 
             private void Update()
             {
+                if (!movementEnabled)
+                {
+                    return;
+                }
+
                 CheckBelow();
                 XMovement();
                 Jump();
+                CheckBounds();
             }
 
             /// <summary>
@@ -133,6 +141,14 @@ namespace RSM
 
                 // If we didn't hit any ground at all, we're not grounded.
                 grounded = false;
+            }
+
+            private void CheckBounds()
+            {
+                if (transform.position.y < -15f)
+                {
+                    PlayerController.Instance.LoseLife();
+                }
             }
 
         }
