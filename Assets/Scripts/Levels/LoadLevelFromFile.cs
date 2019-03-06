@@ -34,7 +34,11 @@ namespace RSM
 
                 if (PlayerPrefs.HasKey("LevelToLoad"))
                 {
+                    // Load the string for the level to load and then delete the prefs.
                     nextLevel = PlayerPrefs.GetString("LevelToLoad");
+
+                    // Delete all is fine here because we've saved nothing else.
+                    PlayerPrefs.DeleteAll();
                 }
 
                 LoadLevel();
@@ -42,14 +46,20 @@ namespace RSM
 
             public void LoadLevel()
             {
-                // If there is no file name given, assume we're loading default level named "0".
+
+                // If there is no file name given, assume we've finished all levels and end the game.
                 CSVData loading;
                 if (string.IsNullOrEmpty(nextLevel))
                 {
-                    loading = levels["0"];
+                    Player.PlayerController.Instance.GameOver();
+                    return;
                 }
                 else
                 {
+                    // Unload previous level from the map.
+                    LevelController.Instance.UnloadLevel();
+                    LevelController.Instance.StartCoroutine("FadeIn");
+
                     // Get the array from the CSV data.
                     loading = levels[nextLevel];
                 }

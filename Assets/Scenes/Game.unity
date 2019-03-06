@@ -947,7 +947,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCheckpoint: {fileID: 0}
-  poweredUp: 0
   minY: -15
 --- !u!212 &1258257703
 SpriteRenderer:
@@ -1469,7 +1468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 2144201339566321345, guid: b0ce0c5fdb4d524458e20a46a80edd27, type: 3}
   falling: {fileID: 4371449043475913288, guid: f7b8ad5954b060a4a8116e1a7a417680, type: 3}
-  enemy: {fileID: 3066933789295478555, guid: 78159eb51f8979e41bd879f19533f8d8, type: 3}
+  enemy: {fileID: 794357253506617377, guid: 80c92922bf6408d469808551ba6ccd16, type: 3}
   headSmash: {fileID: 873509649191964160, guid: 57911796e70753e43b8b000b51af3a81,
     type: 3}
   spike: {fileID: 3066933789295478555, guid: 78159eb51f8979e41bd879f19533f8d8, type: 3}

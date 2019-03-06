@@ -113,9 +113,7 @@ namespace RSM
                     yield return null;
                 }
                 timeFading = 0f;
-                UnloadLevel();
                 GetComponent<LoadLevelFromFile>().LoadLevel();
-                StartCoroutine("FadeIn");
             }
 
             public IEnumerator FadeIn()

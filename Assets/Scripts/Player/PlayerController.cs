@@ -33,10 +33,9 @@ namespace RSM
             // Keeps track of the last checkpoint we reached, so we know where to go back to.
             public Checkpoint currentCheckpoint;
 
-            // Whether or not we currently have the powerup.
-            public bool poweredUp = false;
-
             public float minY = -15;
+
+            private bool gameOver = false;
 
             /// <summary>
             /// Set up a basic Player Controller with the default settings.
@@ -46,7 +45,6 @@ namespace RSM
                 Score = 0;
                 Lives = 2;
                 currentCheckpoint = null;
-                poweredUp = false;
             }
 
             /// <summary>
@@ -94,12 +92,17 @@ namespace RSM
             /// </summary>
             public void LoseLife()
             {
+                // Stops the flashing when the level unloads after we finish the final level.
+                if (gameOver)
+                {
+                    return;
+                }
+
                 // Lose a life, and check that we still have any after this.
                 --Lives;
 
-                if (Lives < 0)
+                if (Lives == -1)
                 {
-                    RSM.Levels.LevelController.Instance.StartCoroutine("FadeOutOnly");
                     GameOver();
                 }
                 else
@@ -139,8 +142,18 @@ namespace RSM
             /// <summary>
             /// Called when the player runs out of lives to end the game.
             /// </summary>
-            private void GameOver()
+            public void GameOver()
             {
+                // Set the game state to done.
+                gameOver = true;
+
+                // If we haven't already faded out, we can do that now.
+                if (RSM.Levels.LevelController.Instance.fadeImage.color.a < 0.95f)
+                {
+                    RSM.Levels.LevelController.Instance.StartCoroutine("FadeOutOnly");
+                }
+
+                // Tell the gameover display to show.
                 GameObject.Find("GameOverCanvas").GetComponent<Interface.GameOver>().Ended();
             }
 
