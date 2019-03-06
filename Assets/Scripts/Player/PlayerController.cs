@@ -125,8 +125,13 @@ namespace RSM
 
             public void LevelLoaded(Vector2 location)
             {
+                // Move to the location we want to be at.
                 transform.position = location;
+
+                // Set the location where we die below, based on where we spawned.
                 minY = location.y - 15f;
+
+                // Make sure the camera and background are lined up properly.
                 Camera.main.GetComponent<CameraFollow>().Start();
                 GameObject.Find("Background").GetComponent<CameraFollow>().Start();
             }
@@ -136,9 +141,7 @@ namespace RSM
             /// </summary>
             private void GameOver()
             {
-                // Display game over info.
-                // Display high scores.
-                // Save high scores.
+                GameObject.Find("GameOverCanvas").GetComponent<Interface.GameOver>().Ended();
             }
 
         }
