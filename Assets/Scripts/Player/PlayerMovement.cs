@@ -145,10 +145,19 @@ namespace RSM
 
             private void CheckBounds()
             {
-                if (transform.position.y < -15f)
+                if (transform.position.y < PlayerController.Instance.minY)
                 {
                     PlayerController.Instance.LoseLife();
                 }
+            }
+
+            /// <summary>
+            /// Called to enable/disable the player's movements during transitions.
+            /// <param name="state">Whether movement should be turned on or off.</param>
+            /// </summary>
+            public void SetMovement(bool state)
+            {
+                movementEnabled = state;
             }
 
         }
